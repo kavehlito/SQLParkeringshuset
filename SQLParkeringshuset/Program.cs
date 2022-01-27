@@ -9,13 +9,13 @@ namespace SQLParkeringshuset
         {
             {
                 Console.WriteLine("Welcome to SQL Stuff\n");
-                int menuSel = 8;
+                int menuSel = 9;
                 do
                 {
                     menuSel = MenuSelection();
                     MenuExecution(menuSel);
 
-                } while (menuSel != 8);
+                } while (menuSel != 9);
             }
         }
         public static int MenuSelection()
@@ -25,12 +25,13 @@ namespace SQLParkeringshuset
             Console.WriteLine("Menu:");
             Console.WriteLine("1 - View Cars and Spots");
             Console.WriteLine("2 - Add Car");
-            Console.WriteLine("3 - View Cities");
-            Console.WriteLine("4 - Add City");
-            Console.WriteLine("5 - View Parkinghouses");
-            Console.WriteLine("6 - Add Parkinghouse");
-            Console.WriteLine("7 - Add Parkingslot");
-            Console.WriteLine("8 - Quit");
+            Console.WriteLine("3 - Park Car");
+            Console.WriteLine("4 - View Cities");
+            Console.WriteLine("5 - Add City");
+            Console.WriteLine("6 - View Parkinghouses");
+            Console.WriteLine("7 - Add Parkinghouse");
+            Console.WriteLine("8 - Add Parkingslot");
+            Console.WriteLine("9 - Quit");
 
             string userInput = Console.ReadLine();
             int.TryParse(userInput, out menuSel);
@@ -53,21 +54,24 @@ namespace SQLParkeringshuset
                         AddCar();
                         break;
                     case 3:
-                        ViewCities();
+                        ParkCar();
                         break;
                     case 4:
-                        AddCity();
+                        ViewCities();
                         break;
                     case 5:
-                        ViewParkingHouse();
+                        AddCity();
                         break;
                     case 6:
-                        AddParkingHouse();
+                        ViewParkingHouse();
                         break;
                     case 7:
-                        AddParkingSlot();
+                        AddParkingHouse();
                         break;
                     case 8:
+                        AddParkingSlot();
+                        break;
+                    case 9:
                         Console.WriteLine("Bye Felicia");
                         break;
                 }
@@ -136,16 +140,18 @@ namespace SQLParkeringshuset
 
             var newCar = new Models.Car
             {
-                Plate = "XPW" + rNumber,
-                Make = "Tesla",
-                Color = "Röd"
+                Plate = "KHJ" + rNumber,
+                Make = "Ferarri",
+                Color = "Lila"
             };
             int rowsAffected = DataBaseDapper.InsertCar(newCar);
             Console.WriteLine("Antal bilar tillagda: " + rowsAffected);
             Console.WriteLine("----------------------------------------------");
-
+        }
+        public static void ParkCar()
+        {
             // Parkera bil
-            rowsAffected = DataBaseDapper.ParkCar(6, 12);
+            int rowsAffected = DataBaseDapper.ParkCar(18, 34);
             Console.WriteLine("Antal bilar parkerade: " + rowsAffected);
             Console.WriteLine("----------------------------------------------");
         }
