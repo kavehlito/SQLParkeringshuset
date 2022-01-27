@@ -135,7 +135,26 @@ namespace SQLParkeringshuset
         {
             int affectedRows = 0;
 
-            var sql = $"insert into ParkingHouses(HouseNamem, CityId) values ('{parkingHouse.HouseName}',{parkingHouse.CityId})";
+            var sql = $"insert into ParkingHouses(HouseName, CityId) values ('{parkingHouse.HouseName}',{parkingHouse.CityId})";
+
+            using (var connection = new SqlConnection(connString))
+            {
+                try
+                {
+                    affectedRows = connection.Execute(sql);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+            return affectedRows;
+        }
+        public static int InsertParkingSlots(Models.ParkingSlot parkingSlot)
+        {
+            int affectedRows = 0;
+
+            var sql = $"insert into ParkingSlots(SlotNumber, ElectricOutlet, ParkingHouseId) values ({parkingSlot.SlotNumber},{parkingSlot.ElectricOutlet},{parkingSlot.ParkingHouseId})";
 
             using (var connection = new SqlConnection(connString))
             {

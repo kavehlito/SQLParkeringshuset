@@ -77,6 +77,25 @@ namespace SQLParkeringshuset
             {
                 Console.WriteLine($"{parkingHouse.Id}\t{parkingHouse.HouseName}\t{parkingHouse.CityId}");
             }
+            Console.WriteLine("----------------------------------------------");
+
+            /*var newParkingHouse = new Models.ParkingHouse
+            {
+                HouseName = "Märta Garaget",
+                CityId = 4
+            };
+            int rowsAffected = DataBaseDapper.InsertParkingHouse(newParkingHouse);
+            Console.WriteLine($"Antal parkeringshus tillagda: {rowsAffected}");
+            Console.WriteLine("----------------------------------------------"); */
+
+            /*var newParkingSlot = new Models.ParkingSlot
+            {
+                SlotNumber = 1,
+                ElectricOutlet = 1,
+                ParkingHouseId = 7
+            };
+            int rowsAffected = DataBaseDapper.InsertParkingSlots(newParkingSlot);
+            Console.WriteLine($"Antal parkeringsplatser tillagda: {rowsAffected}");*/
         }
     }
 }

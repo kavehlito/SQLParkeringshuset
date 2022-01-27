@@ -10,7 +10,7 @@ namespace SQLParkeringshuset.Models
     {
         public int Id { get; set; }
         public int SlotNumber { get; set; }
-        public bool ElectricOutlet { get; set; }
+        public int ElectricOutlet { get; set; }
         public int ParkingHouseId { get; set; }
     }
 }
