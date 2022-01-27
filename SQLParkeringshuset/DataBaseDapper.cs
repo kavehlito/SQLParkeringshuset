@@ -120,5 +120,35 @@ namespace SQLParkeringshuset
             }
             return parkingHouses;
         }
+        public static List<Models.ParkingSlot> GetAllParkingSlots()
+        {
+            var sql = "SELECT * FROM ParkingSlots";
+            var parkingSlots = new List<Models.ParkingSlot>();
+            using (var connection = new SqlConnection(connString))
+            {
+                connection.Open();
+                parkingSlots = connection.Query<Models.ParkingSlot>(sql).ToList();
+            }
+            return parkingSlots;
+        }
+        public static int InsertParkingHouse(Models.ParkingHouse parkingHouse)
+        {
+            int affectedRows = 0;
+
+            var sql = $"insert into ParkingHouses(HouseNamem, CityId) values ('{parkingHouse.HouseName}',{parkingHouse.CityId})";
+
+            using (var connection = new SqlConnection(connString))
+            {
+                try
+                {
+                    affectedRows = connection.Execute(sql);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+            return affectedRows;
+        }
     }
 }

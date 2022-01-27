@@ -63,13 +63,13 @@ namespace SQLParkeringshuset
             }
             Console.WriteLine("----------------------------------------------");
 
-            /* var newCity = new Models.City
-             {
-                 CityName = "Märsta"
-             };
-             int rowsAffected = DataBaseDapper.InsertCity(newCity);
-             Console.WriteLine($"Antal städer tillagda: {rowsAffected}"); */
-            Console.WriteLine("----------------------------------------------");
+            /*var newCity = new Models.City
+            {
+                CityName = "Märsta"
+            };
+            int rowsAffected = DataBaseDapper.InsertCity(newCity);
+            Console.WriteLine($"Antal städer tillagda: {rowsAffected}"); 
+            Console.WriteLine("----------------------------------------------");*/
 
             Console.WriteLine("Alla parkeringshus: ");
             var parkingHouses = DataBaseDapper.GetAllParkingHouses();
