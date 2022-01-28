@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace SQLParkeringshuset.Models
 {
-    class AvailableSlots
+    class CityOutlets
     {
-        public string HouseName { get; set; }
-        public int SlotNumber { get; set; }
-        public int Id { get; set; }
+        public string CityName { get; set; }
+        public int AmountOutlets { get; set; }
     }
 }

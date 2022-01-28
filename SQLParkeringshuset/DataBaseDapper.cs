@@ -174,8 +174,8 @@ namespace SQLParkeringshuset
             var availableSlots = new List<Models.AvailableSlots>();
 
             var sql = @"SELECT
-                            HouseName
-                            ,STRING_AGG(ParkingSlots.SlotNumber, ', ') AS Slots
+                            ParkingSlots.Id
+                            ,SlotNumber
                         FROM ParkingSlots
                         LEFT JOIN ParkingHouses
                         ON ParkingHouses.Id = ParkingHouseId
@@ -183,13 +183,78 @@ namespace SQLParkeringshuset
                         ON Cars.ParkingSlotsId = ParkingSlots.Id
                         LEFT JOIN Cities
                         ON Cities.Id = ParkingHouses.CityId
-                        WHERE Cars.ParkingSlotsId IS NULL AND HouseName = '" + city + "' GROUP BY HouseName";
+                        WHERE Cars.ParkingSlotsId IS NULL AND HouseName = '" + city + "'";
 
             using (var connection = new SqlConnection(connString))
             {
                 availableSlots = connection.Query<Models.AvailableSlots>(sql).ToList();
             }
             return availableSlots;
+        }
+        public static int DriveCar(int carId)
+        {
+            int affectedRows = 0;
+            var sql = $"update Cars set ParkingSlotsId = NULL where Id = {carId}";
+            using (var connection = new SqlConnection(connString))
+            {
+                affectedRows = connection.Execute(sql);
+            }
+            return affectedRows;
+        }
+        public static List<Models.AmountOfOutlets> GetAmountOfOutlets()
+        {
+            var sql = @"SELECT
+                            HouseName
+                            ,COUNT(ElectricOutlet) AS 'OutletAmount'
+                        FROM ParkingHouses
+                        LEFT JOIN ParkingSlots
+                        ON ParkingSlots.ParkingHouseId = ParkingHouses.Id
+                        WHERE ParkingSlots.ElectricOutlet = 1
+                        GROUP BY HouseName";
+            var outletsPerHouse = new List<Models.AmountOfOutlets>();
+            using(var connection = new SqlConnection(connString))
+            {
+                outletsPerHouse = connection.Query<Models.AmountOfOutlets>(sql).ToList();
+            }
+            return outletsPerHouse;
+        }
+        public static List<Models.CityOutlets> GetAmountOfCityOutlets()
+        {
+            var sql = @"SELECT
+                            CityName
+                            ,COUNT(ElectricOutlet) AS AmountOutlets
+                        FROM ParkingSlots
+                        LEFT JOIN ParkingHouses
+                        ON ParkingHouses.Id = ParkingSlots.ParkingHouseId
+                        LEFT JOIN Cities
+                        ON Cities.Id =  ParkingHouses.CityId
+                        WHERE ElectricOutlet = 1
+                        GROUP BY CityName";
+            var cityOutlets = new List<Models.CityOutlets>();
+            using (var connection = new SqlConnection(connString))
+            {
+                cityOutlets = connection.Query<Models.CityOutlets>(sql).ToList();
+            }
+            return cityOutlets;
+        }
+        public static List<Models.EmptySpots> GetEmptySpots()
+        {
+            var sql = @"SELECT
+                            ParkingSlots.Id
+                            ,SlotNumber
+                            ,HouseName
+                            ,CityName
+                        FROM ParkingSlots
+                        LEFT JOIN Cars ON Cars.ParkingSlotsId = ParkingSlots.Id
+                        LEFT JOIN ParkingHouses ON ParkingHouses.Id = ParkingSlots.ParkingHouseId
+                        JOIN Cities ON ParkingHouses.CityId = Cities.Id
+                        WHERE Cars.Id IS NULL";
+            var emptySlots = new List<Models.EmptySpots>();
+            using (var connection = new SqlConnection(connString))
+            {
+                emptySlots = connection.Query<Models.EmptySpots>(sql).ToList();
+            }
+            return emptySlots;
         }
     }
 }

@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace SQLParkeringshuset.Models
 {
-    class AvailableSlots
+    class EmptySpots
     {
-        public string HouseName { get; set; }
-        public int SlotNumber { get; set; }
         public int Id { get; set; }
+        public int SlotNumber { get; set; }
+        public string HouseName { get; set; }
+        public string CityName { get; set; }
     }
 }
