@@ -9,13 +9,13 @@ namespace SQLParkeringshuset
         {
             {
                 Console.WriteLine("Welcome to SQL Stuff\n");
-                int menuSel = 9;
+                int menuSel = 10;
                 do
                 {
                     menuSel = MenuSelection();
                     MenuExecution(menuSel);
 
-                } while (menuSel != 9);
+                } while (menuSel != 10);
             }
         }
         public static int MenuSelection()
@@ -31,7 +31,8 @@ namespace SQLParkeringshuset
             Console.WriteLine("6 - View Parkinghouses");
             Console.WriteLine("7 - Add Parkinghouse");
             Console.WriteLine("8 - Add Parkingslot");
-            Console.WriteLine("9 - Quit");
+            Console.WriteLine("9 - Show Available Slots");
+            Console.WriteLine("10 - Quit");
 
             string userInput = Console.ReadLine();
             int.TryParse(userInput, out menuSel);
@@ -72,6 +73,9 @@ namespace SQLParkeringshuset
                         AddParkingSlot();
                         break;
                     case 9:
+                        EmptySlots();
+                        break;
+                    case 10:
                         Console.WriteLine("Bye Felicia");
                         break;
                 }
@@ -134,15 +138,21 @@ namespace SQLParkeringshuset
         }
         public static void AddCar()
         {
+            Console.WriteLine("Ange första 3 bokstäverna på regplåten");
+            string userPlateInput = Console.ReadLine();
+            Console.WriteLine("Ange tillverkare");
+            string userMakeInput = Console.ReadLine();
+            Console.WriteLine("Ange färg");
+            string userColorInput = Console.ReadLine();
             // Lägg till ny bil
             Random rnd = new Random();
             var rNumber = rnd.Next(100, 999);
 
             var newCar = new Models.Car
             {
-                Plate = "KHJ" + rNumber,
-                Make = "Ferarri",
-                Color = "Lila"
+                Plate = userPlateInput + rNumber,
+                Make = userMakeInput,
+                Color = userColorInput
             };
             int rowsAffected = DataBaseDapper.InsertCar(newCar);
             Console.WriteLine("Antal bilar tillagda: " + rowsAffected);
@@ -157,9 +167,11 @@ namespace SQLParkeringshuset
         }
         public static void AddCity()
         {
+            Console.WriteLine("Vilken stad vill du lägga till?");
+            string userInput = Console.ReadLine();
             var newCity = new Models.City
             {
-                CityName = "Märsta"
+                CityName = userInput
             };
             int rowsAffected = DataBaseDapper.InsertCity(newCity);
             Console.WriteLine($"Antal städer tillagda: {rowsAffected}");
@@ -167,9 +179,11 @@ namespace SQLParkeringshuset
         }
         public static void AddParkingHouse()
         {
+            Console.WriteLine("Ange Parkeringshus du vill lägga till");
+            string userInput = Console.ReadLine();
             var newParkingHouse = new Models.ParkingHouse
             {
-                HouseName = "Märta Garaget",
+                HouseName = userInput,
                 CityId = 4
             };
             int rowsAffected = DataBaseDapper.InsertParkingHouse(newParkingHouse);
@@ -187,7 +201,30 @@ namespace SQLParkeringshuset
             int rowsAffected = DataBaseDapper.InsertParkingSlots(newParkingSlot);
             Console.WriteLine($"Antal parkeringsplatser tillagda: {rowsAffected}");
         }
-
+        public static void EmptySlots()
+        {
+            Console.WriteLine("Välj en stad");
+            var cities = DataBaseDapper.GetAllCities();
+            var parkingHouses = DataBaseDapper.GetAllParkingHouses();
+            foreach (var city in cities)
+            {
+                Console.WriteLine($"{city.CityName}");
+                string userInput = Console.ReadLine();
+                if (userInput == city.CityName)
+                {
+                    foreach (var parkingHouse in parkingHouses)
+                    {
+                        Console.WriteLine($"{parkingHouse.HouseName}");
+                        string parkingHouseInput = Console.ReadLine();
+                        var availableSlots = DataBaseDapper.GetAvailableSlots(parkingHouseInput);
+                        foreach (var emptySpot in availableSlots)
+                        {
+                            Console.WriteLine($"{emptySpot.HouseName}\t{emptySpot.Slots}");
+                        }
+                    }
+                }
+            }
+        }
 
 
 

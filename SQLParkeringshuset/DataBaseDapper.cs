@@ -169,5 +169,27 @@ namespace SQLParkeringshuset
             }
             return affectedRows;
         }
+        public static List<Models.AvailableSlots> GetAvailableSlots(string city)
+        {
+            var availableSlots = new List<Models.AvailableSlots>();
+
+            var sql = @"SELECT
+                            HouseName
+                            ,STRING_AGG(ParkingSlots.SlotNumber, ', ') AS Slots
+                        FROM ParkingSlots
+                        LEFT JOIN ParkingHouses
+                        ON ParkingHouses.Id = ParkingHouseId
+                        LEFT JOIN Cars
+                        ON Cars.ParkingSlotsId = ParkingSlots.Id
+                        LEFT JOIN Cities
+                        ON Cities.Id = ParkingHouses.CityId
+                        WHERE Cars.ParkingSlotsId IS NULL AND HouseName = '" + city + "' GROUP BY HouseName";
+
+            using (var connection = new SqlConnection(connString))
+            {
+                availableSlots = connection.Query<Models.AvailableSlots>(sql).ToList();
+            }
+            return availableSlots;
+        }
     }
 }
