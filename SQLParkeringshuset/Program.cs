@@ -240,10 +240,20 @@ namespace SQLParkeringshuset
         {
             Console.WriteLine("Ange Parkeringshus du vill lägga till");
             string userInput = Console.ReadLine();
+            Console.WriteLine();
+            Console.WriteLine("Välj en stad(ID Nummer) att lägga parkeringshuset i");
+            var cities = DataBaseDapper.GetAllCities();
+            foreach (var city in cities)
+            {
+                Console.WriteLine($"{city.Id}\t{city.CityName}");
+            }
+            int cityUserInput = Convert.ToInt32(Console.ReadLine());
+
+            
             var newParkingHouse = new Models.ParkingHouse
             {
                 HouseName = userInput,
-                CityId = 4
+                CityId = cityUserInput
             };
             int rowsAffected = DataBaseDapper.InsertParkingHouse(newParkingHouse);
             Console.WriteLine($"Antal parkeringshus tillagda: {rowsAffected}");
@@ -251,11 +261,17 @@ namespace SQLParkeringshuset
         }
         public static void AddParkingSlot()
         {
+            Console.WriteLine("Ange parkeringsnummer");
+            int slotInput = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Ska det finnas elutag? (0 för NEJ, 1 för JA");
+            byte outletInput = Convert.ToByte(Console.ReadLine());
+            Console.WriteLine("Ange parkeringshusID");
+            int idInput = Convert.ToInt32(Console.ReadLine());
             var newParkingSlot = new Models.ParkingSlot
             {
-                SlotNumber = 2,
-                ElectricOutlet = 0,
-                ParkingHouseId = 7
+                SlotNumber = slotInput,
+                ElectricOutlet = outletInput,
+                ParkingHouseId = idInput
             };
             int rowsAffected = DataBaseDapper.InsertParkingSlots(newParkingSlot);
             Console.WriteLine($"Antal parkeringsplatser tillagda: {rowsAffected}");
